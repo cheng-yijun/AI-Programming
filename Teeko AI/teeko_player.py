@@ -91,6 +91,35 @@ class TeekoPlayer:
             move.insert(0, (row, col))
             move.insert(1, (scr_row, scr_col))
             return move
+        opo_piece = None
+        if self.my_piece == 'r':
+            opo_piece = 'b'
+        else:
+            opo_piece = 'r'
+        # Hard code for a special case
+        if state[0][1] == state[0][2] == opo_piece and state[0][0] == state[0][3] == state[0][4] == ' ':
+            move.insert(0, (0, 3))
+            return move
+        if state[0][2] == state[0][3] == opo_piece and state[0][0] == state[0][1] == state[0][4] == ' ':
+            move.insert(0, (0, 1))
+            return move
+        if state[4][1] == state[4][2] == opo_piece and state[4][0] == state[4][3] == state[4][4] == ' ':
+            move.insert(0, (4, 3))
+            return move
+        if state[4][2] == state[4][3] == opo_piece and state[4][0] == state[4][1] == state[4][4] == ' ':
+            move.insert(0, (4, 1))
+            return move
+        for i in range(3):
+            for j in range(5):
+                if j-1 >= 0 and state[i][j] == state[i+1][j-1] == state[i+2][j-1] == self.my_piece:
+                    move.insert(0, (i+1, j))
+                    return move
+        for i in range(3):
+            for j in range(5):
+                if j+1 <= 4 and state[i][j] == state[i+1][j+1] == state[i+2][j+1] == self.my_piece:
+                    move.insert(0, (i+1, j))
+                    return move
+
 
         # select an unoccupied space randomly
         # implement a minimax algorithm to play better
@@ -609,5 +638,3 @@ if ai.game_value(ai.board) == 1:
 else:
     print("You win! Game over.")
 
-
-# if state[row][col] != ' ' and state[row+1][col] == ' ' and state[row+1][col-1] == state[row + 1][col+1] == state[row + 2][col] == state[row][col]:
